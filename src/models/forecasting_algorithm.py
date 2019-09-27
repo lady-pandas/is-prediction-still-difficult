@@ -11,7 +11,7 @@ from sklearn.metrics import mean_absolute_error, make_scorer
 
 def weighted_mape(y_true, y_pred, sample_weight):
     if sample_weight is None:
-        sample_weight = [1]*len(y_pred)
+        sample_weight = [1] * len(y_pred)
     else:
         sample_weight = sample_weight.loc[y_true.index.values].values
 
@@ -63,7 +63,7 @@ class ForecastingAlgorithm(ABC):
         return lower_level, upper_level
 
     def cross_val_score(self, X, y):
-        if type(y) != pd.Series:
+        if not isinstance(y, pd.Series):
             y = pd.Series(y, index=X.index)
 
         y_vals = []
@@ -85,7 +85,7 @@ class ForecastingAlgorithm(ABC):
         return test_predictions - stdev_scaled, test_predictions + stdev_scaled
 
     def do_grid_search(self, X, y, grid_search_params=None):
-        if type(y) != pd.Series:
+        if not isinstance(y, pd.Series):
             y = pd.Series(y)
 
         gs_params = grid_search_params if grid_search_params is not None else self.default_grid_search_params
